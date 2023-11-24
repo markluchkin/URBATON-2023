@@ -15,7 +15,12 @@ class leaderController {
       return;
     }
     try {
-      const existingLeader = await Leader.findOne({ email });
+      const existingLeader = await Leader.findOne({
+        $or: [
+          { email: email },
+          { phone: phone }
+        ]
+      });
       if (existingLeader) {
         res.status(400).json({ message: "Эта организация уже зарегистрирована" });
         console.log("Эта организация уже зарегистрирована")
