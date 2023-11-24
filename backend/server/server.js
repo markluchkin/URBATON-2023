@@ -30,7 +30,7 @@ module.exports = class Server {
 
     this.app.use("/api/admin/", adminRouter);
     this.app.use("/api/leader/", leaderRouter);
-    
+
     this.app.listen(this.port, () => {
       console.log(`Server started at http://127.0.0.1:${this.port}`);
     });
