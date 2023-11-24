@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const userController = require("../controllers/admin.controller.js");
+const adminController = require("../controllers/admin.controller.js");
 const { check } = require("express-validator");
 const router = new Router();
 
-router.get('/news', userController.news);
+router.get('/news', adminController.news);
 
 module.exports = router;
