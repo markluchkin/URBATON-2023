@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const teacherSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
@@ -24,6 +32,18 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  timetable: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
+    },
+  ],
+  groups: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+    },
+  ],
 });
 
 const Teacher = mongoose.model("Teacher", teacherSchema);

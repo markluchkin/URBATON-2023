@@ -33,13 +33,31 @@ const studentSchema = new mongoose.Schema({
     required: true,
   },
   group: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Group",
   },
   instrument: {
     type: String,
     required: true,
   },
+  marks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mark",
+    },
+  ],
+  timetable: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
+    },
+  ],
+  parents: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Parent",
+    },
+  ],
 });
 
 const Student = mongoose.model("Student", studentSchema);

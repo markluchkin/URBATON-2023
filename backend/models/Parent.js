@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const parentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
@@ -19,7 +27,13 @@ const parentSchema = new mongoose.Schema({
     type: String,
     default: "Parent",
     required: true,
-  }
+  },
+  students: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+    },
+  ],
 });
 
 const Parent = mongoose.model("Parent", parentSchema);
