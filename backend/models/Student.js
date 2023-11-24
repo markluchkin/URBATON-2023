@@ -20,6 +20,10 @@ const studentSchema = new mongoose.Schema({
     default: "Student",
     required: true,
   },
+  grade: {
+    type: String,
+    required: true,
+  },
   instrument: {
     type: String,
     required: true,
