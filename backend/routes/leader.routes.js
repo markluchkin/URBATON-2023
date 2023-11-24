@@ -24,7 +24,7 @@ router.post('/signup', [
     .withMessage("Пароль не может быть пустым"),
 ], leaderController.signup);
 
-router.get('/login', [
+router.post('/login', [
   check("email")
     .exists()
     .withMessage("Требуется Email")
