@@ -11,6 +11,7 @@ class leaderController{
         const validator = validationResult(req);
         if (!validator.isEmpty()) {
           res.status(401).json(validator.errors.shift());
+          console.log(validator.errors.shift())
           return;
         }
         try {
@@ -33,8 +34,9 @@ class leaderController{
             await newLeader.save();
         
             res.status(201).json({ message: "Leader created successfully" });
+            console.log("Leader created successfully");
         } catch(error) {
-            console.error("Error creating leader:", error);
+            console.log("Error creating leader:", error);
             res.status(500).json({ message: "Internal server error" });
         }
     }
@@ -51,13 +53,15 @@ class leaderController{
       const leader = await Leader.findOne({ email });
 
       if (!leader) {
-        res.status(401).json({ message: "" });
+        res.status(401).json({ message: "Нет такого пользователя" });
+        console.log("Нет такого пользователя");
         return;
       }
       const isPasswordValid = await bcrypt.compare(password, leader.password);
 
       if (!isPasswordValid) {
         res.status(401).json({ message: "Неверные данные" });
+        console.log("Неверные данные");
         return;
       }
       const token = jwt.sign(
@@ -67,8 +71,9 @@ class leaderController{
       );
 
       res.status(200).json({ token, userId: leader._id });
+      console.log(token);
     } catch (error) {
-      console.error("Error during login:", error);
+      console.log("Error during login:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
