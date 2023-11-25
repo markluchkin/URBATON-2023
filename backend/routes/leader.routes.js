@@ -2,6 +2,7 @@ const { Router } = require("express");
 const leaderController = require("../controllers/leader.controller.js");
 const { check } = require("express-validator");
 const router = new Router();
+const { authenticateToken } = require("../controllers/role.middleware");
 
 router.post('/signup', [
   check("name")
@@ -52,6 +53,6 @@ router.post('/createUser', [
     .not()
     .isEmpty()
     .withMessage("Роль не может быть пустой"),
-], leaderController.createUser);
+], authenticateToken, leaderController.createUser);
 
 module.exports = router;

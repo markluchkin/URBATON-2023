@@ -43,6 +43,10 @@ const teacherSchema = new mongoose.Schema({
       ref: "Group",
     },
   ],
+  organization: {
+    type: String,
+    required: true,
+}
 });
 
 const Teacher = mongoose.model("Teacher", teacherSchema);

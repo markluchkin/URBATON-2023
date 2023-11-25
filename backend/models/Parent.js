@@ -34,6 +34,10 @@ const parentSchema = new mongoose.Schema({
       ref: "Student",
     },
   ],
+  organization: {
+    type: String,
+    required: true,
+  }
 });
 
 const Parent = mongoose.model("Parent", parentSchema);

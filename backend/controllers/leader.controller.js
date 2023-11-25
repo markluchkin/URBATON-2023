@@ -22,7 +22,7 @@ const transporter = nodemailer.createTransport({
 
 class leaderController {
   async signup(req, res) {
-    const { name, email, phone } = req.body;
+    const { organization, email, phone } = req.body;
     const validator = validationResult(req);
     if (!validator.isEmpty()) {
       res.status(401).json(validator.errors.shift());
@@ -48,19 +48,19 @@ class leaderController {
         uppercase: true,
         excludeSimilarCharacters: true,
       });
-      
+
       const hashedPassword = await bcrypt.hash(generatedPassword, 10);
       console.log(email, generatedPassword);
 
       const newLeader = new Leader({
-        name: name,
+        organization: organization,
         email: email,
         phone: phone,
         password: hashedPassword,
       });
       await newLeader.save();
 
-      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword});
+      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword });
 
       // отправить письмом на почтуу
       const mailOptions = {
@@ -84,7 +84,12 @@ class leaderController {
     }
   }
 
-  async createUser(req,res){
+  async createUser(req, res) {
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Leader") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
     const { name, surname, email, role, phone } = req.body;
     const validator = validationResult(req);
     if (!validator.isEmpty()) {
@@ -93,12 +98,6 @@ class leaderController {
       return;
     }
     try {
-      const existingLeader = await Leader.findOne({
-        $or: [
-          { email: email },
-          { phone: phone }
-        ]
-      });
       const existingAdmin = await Admin.findOne({
         $or: [
           { email: email },
@@ -124,23 +123,23 @@ class leaderController {
         ]
       });
 
-      if (existingAdmin){
-        res.status(400).json({ message: "Этот пользователь уже зарегистрирован"});
+      if (existingAdmin) {
+        res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
         console.log("Этот пользователь уже зарегистрирован");
         return;
       }
-      else if (existingTeacher){
-        res.status(400).json({ message: "Этот пользователь уже зарегистрирован"});
+      else if (existingTeacher) {
+        res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
         console.log("Этот пользователь уже зарегистрирован");
         return;
       }
-      else if (existingParent){
-        res.status(400).json({ message: "Этот пользователь уже зарегистрирован"});
+      else if (existingParent) {
+        res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
         console.log("Этот пользователь уже зарегистрирован");
         return;
       }
-      else if (existingStudent){
-        res.status(400).json({ message: "Этот пользователь уже зарегистрирован"});
+      else if (existingStudent) {
+        res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
         console.log("Этот пользователь уже зарегистрирован");
         return;
       }
@@ -159,49 +158,57 @@ class leaderController {
       switch (role) {
         case "Admin":
           const newAdmin = new Admin({
-          name: name,
-          surname: surname,
-          email: email,
-          phone: phone,
-          password: hashedPassword})
+            name: name,
+            surname: surname,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            organization: userOrganization
+          })
           await newAdmin.save()
           break
 
         case "Teacher":
           const newTeacher = new Teacher({
-          name: name,
-          surname: surname,
-          email: email,
-          phone: phone,
-          password: hashedPassword})
+            name: name,
+            surname: surname,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            organization: userOrganization
+          })
           await newTeacher.save()
           break
 
         case "Parent":
           const newParent = new Parent({
-          name: name,
-          surname: surname,
-          email: email,
-          phone: phone,
-          password: hashedPassword})
+            name: name,
+            surname: surname,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            organization: userOrganization
+          })
           await newParent.save()
           break
 
         case "Student":
           const newStudent = new Student({
-          name: name,
-          surname: surname,
-          email: email,
-          phone: phone,
-          password: hashedPassword})
+            name: name,
+            surname: surname,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            organization: userOrganization
+          })
           await newStudent.save()
-          break  
-          
-      } 
+          break
 
-      res.status(201).json({ message: "Успешная регистрация пользователя", password: generatedPassword, role: role});
+      }
 
-       // отправить письмом на почтуу
+      res.status(201).json({ message: "Успешная регистрация пользователя", password: generatedPassword, role: role });
+
+      // отправить письмом на почтуу
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
@@ -222,6 +229,47 @@ class leaderController {
       res.status(500).json({ message: "Internal server error" });
     }
   }
+  
+  static async getAllAdmins(req, res){
+    try{
+      const admins = await Admin.find({});
+      res.join(admins)
+    } catch (error){
+      console.error('Error retrieving students:', error);
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  }
+
+  static async getAllTeachers(req, res){
+    try{
+      const teachers = await Teacher.find({});
+      res.join(teachers)
+    } catch (error){
+      console.error('Error retrieving students:', error);
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  }
+
+  static async getAllParents(req, res){
+    try{
+      const parents = await Parent.find({});
+      res.join(parents)
+    } catch (error){
+      console.error('Error retrieving students:', error);
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  }
+
+  static async getAllStudents(req, res){
+    try{
+      const students = await Student.find({});
+      res.join(students)
+    } catch (error){
+      console.error('Error retrieving students:', error);
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  }
+
 }
 
 module.exports = new leaderController();

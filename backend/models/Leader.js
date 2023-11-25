@@ -19,6 +19,10 @@ const leaderSchema = new mongoose.Schema({
     type: String,
     default: "Leader",
     required: true,
+  },
+  organization: {
+    type: String,
+    required: true,
   }
 });
 

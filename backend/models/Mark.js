@@ -16,6 +16,10 @@ const markSchema = new mongoose.Schema({
     teacher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Teacher",
+    },
+    organization: {
+        type: String,
+        required: true,
     }
 })
 const Mark = mongoose.model("Mark", markSchema);
