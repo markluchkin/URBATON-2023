@@ -28,7 +28,7 @@ const adminSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  organization:{
+  organization: {
     type: String,
     required: true,
   }

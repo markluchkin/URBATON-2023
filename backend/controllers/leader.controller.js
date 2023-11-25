@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const generatePassword = require("generate-password");
 const Leader = require("../models/Leader");
 const Admin = require("../models/Admin");
@@ -8,9 +7,7 @@ const Parent = require("../models/Parent");
 const Student = require("../models/Student");
 const Group = require("../models/Group");
 const { validationResult } = require("express-validator");
-const mongoose = require("../db");
 
-// MAILER: password -> user
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -19,7 +16,6 @@ const transporter = nodemailer.createTransport({
     pass: 'bqlj vmty xbsu kshn'
   }
 });
-
 
 class leaderController {
   async signup(req, res) {
@@ -39,7 +35,7 @@ class leaderController {
       });
       if (existingLeader) {
         res.status(400).json({ message: "Эта организация уже зарегистрирована" });
-        console.log("Эта организация уже зарегистрирована")
+        //console.log("Эта организация уже зарегистрирована")
         return;
       }
       const generatedPassword = generatePassword.generate({
@@ -49,8 +45,8 @@ class leaderController {
         excludeSimilarCharacters: true,
       });
 
-      const hashedPassword = generatedPassword;//await bcrypt.hash(generatedPassword, 10);
-      console.log(email, generatedPassword);
+      const hashedPassword = generatedPassword; //await bcrypt.hash(generatedPassword, 10);
+      //console.log(email, generatedPassword);
 
       const newLeader = new Leader({
         organization: organization,
@@ -58,45 +54,45 @@ class leaderController {
         phone: phone,
         password: hashedPassword,
       });
+
       await newLeader.save();
+
       const token = jwt.sign(
-        { userId: newLeader._id, email: newLeader.email , role: "Leader", organization: organization},
+        { userId: newLeader._id, email: newLeader.email, role: "Leader", organization: organization },
         "pryanik",
         { expiresIn: "7d" }
       );
 
-      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword, token: token});
+      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword, token: token });
 
-      // отправить письмом на почтуу
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
         subject: '«Art Education Info» — пароль от личного кабинета',
-        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается, вы не получите ответа.'
+        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается.'
       };
+
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
         } else {
-          console.log('Письмо успешно отправлено: ' + info.response);
+          //console.log('Письмо успешно отправлено: ' + info.response);
         }
       });
-
-      console.log("Успешное оформление заявки");
+      //console.log("Успешное оформление заявки");
     } catch (error) {
       console.log("Error creating leader:", error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Ошибка сервера" });
     }
   }
 
   async createUser(req, res) {
     const userOrganization = req.user.organization;
-    console.log(userOrganization);
     const userRole = req.user.role;
     if (userRole !== "Leader") {
-      return res.status(403).json({ error: "В доступе отказано." });
+      return res.status(403).json({ error: "В доступе отказано" });
     }
-    const { name, surname, email, role, phone, subject, group, groups} = req.body;
+    const { name, surname, email, role, phone, subject, group, groups } = req.body;
     try {
       const existingAdmin = await Admin.findOne({
         $or: [
@@ -125,22 +121,22 @@ class leaderController {
 
       if (existingAdmin) {
         res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
-        console.log("Этот пользователь уже зарегистрирован");
+        //console.log("Этот пользователь уже зарегистрирован");
         return;
       }
       else if (existingTeacher) {
         res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
-        console.log("Этот пользователь уже зарегистрирован");
+        //console.log("Этот пользователь уже зарегистрирован");
         return;
       }
       else if (existingParent) {
         res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
-        console.log("Этот пользователь уже зарегистрирован");
+        //console.log("Этот пользователь уже зарегистрирован");
         return;
       }
       else if (existingStudent) {
         res.status(400).json({ message: "Этот пользователь уже зарегистрирован" });
-        console.log("Этот пользователь уже зарегистрирован");
+        //console.log("Этот пользователь уже зарегистрирован");
         return;
       }
 
@@ -152,7 +148,7 @@ class leaderController {
       });
 
       const hashedPassword = generatedPassword//await bcrypt.hash(generatedPassword, 10);
-      console.log(email, generatedPassword);
+      //console.log(email, generatedPassword);
 
       switch (role) {
         case "Admin":
@@ -229,80 +225,80 @@ class leaderController {
         from: 'ekbartedinfo@gmail.com',
         to: email,
         subject: 'Art Education Info» — пароль от личного кабинета',
-        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается, вы не получите ответа.'
+        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается.'
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
         } else {
-          console.log('Письмо успешно отправлено: ' + info.response);
+          //console.log('Письмо успешно отправлено: ' + info.response);
         }
       });
 
-      console.log("Успешная регистрация пользователя");
+      //console.log("Успешная регистрация пользователя");
     } catch (error) {
       console.log("Error creating user:", error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Ошибка сервера" });
     }
   }
-  
-  async getAllAdmins(req, res){
+
+  async getAllAdmins(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
-    try{
-      const admins = await Admin.find({organization: userOrganization});
+    try {
+      const admins = await Admin.find({ organization: userOrganization });
       res.json(admins)
-    } catch (error){
+    } catch (error) {
       console.error('Error retrieving students:', error);
-      res.status(500).json({ error: 'Something went wrong' });
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   }
 
-  async getAllTeachers(req, res){
+  async getAllTeachers(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
-    try{
-      const teachers = await Teacher.find({organization: userOrganization});
+    try {
+      const teachers = await Teacher.find({ organization: userOrganization });
       res.json(teachers)
-    } catch (error){
+    } catch (error) {
       console.error('Error retrieving students:', error);
-      res.status(500).json({ error: 'Something went wrong' });
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   }
 
-  async getAllParents(req, res){
+  async getAllParents(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
-    try{
-      const parents = await Parent.find({organization: userOrganization});
+    try {
+      const parents = await Parent.find({ organization: userOrganization });
       res.json(parents)
-    } catch (error){
+    } catch (error) {
       console.error('Error retrieving students:', error);
-      res.status(500).json({ error: 'Something went wrong' });
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   }
 
-  async getAllStudents(req, res){
+  async getAllStudents(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
-    try{
-      const students = await Student.find({organization: userOrganization});
+    try {
+      const students = await Student.find({ organization: userOrganization });
       res.json(students)
-    } catch (error){
+    } catch (error) {
       console.error('Error retrieving students:', error);
-      res.status(500).json({ error: 'Something went wrong' });
+      res.status(500).json({ error: 'Ошибка сервера' });
     }
   }
 

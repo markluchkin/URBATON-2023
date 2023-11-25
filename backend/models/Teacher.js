@@ -45,7 +45,7 @@ const teacherSchema = new mongoose.Schema({
   organization: {
     type: String,
     required: true,
-}
+  }
 });
 
 const Teacher = mongoose.model("Teacher", teacherSchema);

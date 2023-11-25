@@ -56,7 +56,7 @@ router.post('/createUser', [
     .not()
     .isEmpty()
     .withMessage("Роль не может быть пустой"),
-    check("organization")
+  check("organization")
     .exists()
     .withMessage("Требуется организация")
     .not()

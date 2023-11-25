@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 
 const authenticateToken = (req, res, next) => {
@@ -11,7 +10,7 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, "pryanik", (err, user) => {
         if (err) {
-            return res.status(403).json({ error: "Неправильный токен" });
+            return res.status(403).json({ error: "Неправильный токен. В доступе отказано" });
         }
         req.user = user;
         next();

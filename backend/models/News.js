@@ -13,10 +13,16 @@ const newsSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  organization:{
+  organization: {
     type: String,
     required: true,
-  }
+  },
+  sentTo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+    },
+  ]
 });
 
 const News = mongoose.model("News", newsSchema);

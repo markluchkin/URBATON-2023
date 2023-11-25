@@ -23,7 +23,7 @@ router.post('/create', [
     .not()
     .isEmpty()
     .withMessage("Ученик не может быть пустым"),
-    check("teacher")
+  check("teacher")
     .exists()
     .withMessage("Требуется учитель")
     .not()
