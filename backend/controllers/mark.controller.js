@@ -50,7 +50,7 @@ class markController{
           path: 'groups',
           populate: {
             path: 'students',
-            select: 'name _id', // выбираем только имя и _id студента
+            select: 'name surname _id', // выбираем только имя и _id студента
           },
         });
         if (!teacher){
@@ -61,7 +61,7 @@ class markController{
         console.log(teacher);
         console.log(teacher.groups);
         const formattedGroups = await Promise.all(teacher.groups.map(async (groupName) => {
-          const group = await Group.findOne({ name: groupName }).populate('students', 'name _id');
+          const group = await Group.findOne({ name: groupName }).populate('students', 'name surname _id');
       
           if (!group) {
             return {
@@ -75,6 +75,7 @@ class markController{
             students: group.students.map(student => ({
               id: student._id,
               name: student.name,
+              surname: student.surname
             })),
           };
         }));
