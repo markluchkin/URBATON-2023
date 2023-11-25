@@ -39,7 +39,7 @@ def check_user(db, login, password):
     return
 
 
-def check_news(db, organization, chat_id):
+def check_news(db):
     news = []
     for i in db['news'].find({'organization': organization}):
         if chat_id not in i['sentTo']:
@@ -67,15 +67,16 @@ async def authorize(message: types.Message):
 @dp.message_handler(Command("go"))
 async def send_news(message):
     while True:
-        news = check_news(DB, organization, chat_id)
+        DB = pymongo.MongoClient(DB_URL)["test"]
+        news = check_news(DB)
         for i in news:
-            await bot.send_message(chat_id, text=f"*{i['title']}*\n"
-                                      f"{i['text']}", parse_mode="Markdown")
+            await bot.send_message(chat_id, text=f"*{i['title']}*\n {i['text']}", parse_mode="Markdown")
         time.sleep(30)
 
 
 async def main() -> None:
     await dp.start_polling()
+
 
 if __name__ == '__main__':
     asyncio.run(main())
