@@ -1,11 +1,12 @@
 import asyncio
+import pymongo
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 from aiogram.types import Message, ContentType
-import pymongo
+from config import TOKEN, COLLECTION
 
 
-bot = Bot(token='6875301246:AAG1iF7Hf_zTGy5X872Ewly8YkZyTbBpH54')
+bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 
@@ -22,12 +23,6 @@ async def authorize(message: Message):
         await message.answer(text="Авторизация прошла успешно")
     else:
         await message.answer(text="Не удалось авторизоваться")
-
-
-DB_URL = 'mongodb+srv://admin:admin123@test.ivw9qsv.mongodb.net/?retryWrites=true&w=majority'
-CLUSTER = pymongo.MongoClient(DB_URL)
-DB = CLUSTER["test"]
-COLLECTION = DB["leaders"]
 
 
 async def main() -> None:
