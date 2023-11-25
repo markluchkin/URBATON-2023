@@ -10,7 +10,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 CLUSTER = pymongo.MongoClient(DB_URL)
 DB = CLUSTER["test"]
-
+is_user_authorized = False
 
 @dp.message(CommandStart())
 async def start(message: Message):
@@ -18,15 +18,17 @@ async def start(message: Message):
     await message.answer(f"Здравствуйте, {user_full_name}. Чтобы продолжить, введите ваш логин и пароль через пробел.")
 
 
-@dp.message()
-async def authorize(message: Message):
-    login, password = message.text.split()
-    check = check_user(DB, login, password)
-    if check:
-        await message.answer(text="Авторизация прошла успешно")
-        print(check[0]['organization'])
-    else:
-        await message.answer(text="Не удалось авторизоваться")
+if not(is_user_authorized):
+    @dp.message()
+    async def authorize(message: Message):
+        login, password = message.text.split()
+        check = check_user(DB, login, password)
+        if check:
+            await message.answer(text="Авторизация прошла успешно")
+            print(check[0]['organization'])
+            is_user_authorized = True
+        else:
+            await message.answer(text="Не удалось авторизоваться")
 
 
 async def main() -> None:
