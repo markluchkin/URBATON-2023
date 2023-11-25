@@ -30,7 +30,6 @@ const teacherSchema = new mongoose.Schema({
   },
   subject: {
     type: String,
-    required: true,
   },
   timetable: [
     {

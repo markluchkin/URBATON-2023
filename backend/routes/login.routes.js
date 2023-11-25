@@ -1,12 +1,9 @@
 const { Router } = require("express");
-const leaderController = require("../controllers/leader.controller.js");
+const loginController = require("../controllers/login.controller.js");
 const { check } = require("express-validator");
 const router = new Router();
 
-router.post('/signup', [
-  check("name")
-    .exists()
-    .withMessage("Требуется имя организации"),
+router.post('/login', [
   check("email")
     .exists()
     .withMessage("Требуется Email")
@@ -16,12 +13,12 @@ router.post('/signup', [
     .isEmpty()
     .withMessage("Email не может быть пустым")
     .normalizeEmail(),
-  check("phone")
+  check("password")
     .exists()
-    .withMessage("Требуется телефон")
+    .withMessage("Требуется пароль")
     .not()
     .isEmpty()
     .withMessage("Пароль не может быть пустым"),
-], leaderController.signup);
+], loginController.signup);
 
 module.exports = router;

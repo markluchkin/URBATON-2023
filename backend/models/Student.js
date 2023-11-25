@@ -30,7 +30,6 @@ const studentSchema = new mongoose.Schema({
   },
   grade: {
     type: String,
-    required: true,
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,
@@ -38,7 +37,6 @@ const studentSchema = new mongoose.Schema({
   },
   instrument: {
     type: String,
-    required: true,
   },
   marks: [
     {
