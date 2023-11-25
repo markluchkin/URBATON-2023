@@ -15,7 +15,9 @@ is_user_authorized = False
 @dp.message(CommandStart())
 async def start(message: Message):
     user_full_name = message.from_user.full_name
-    await message.answer(f"Здравствуйте, {user_full_name}. Чтобы продолжить, введите: /auth <ваш логин> <ваш пароль> через пробел.")
+    await message.answer(f"Здравствуйте, {user_full_name}. \n"
+                         f"Чтобы продолжить, введите: /auth <ваш логин> <ваш пароль>. \n"
+                         f"Пример: /auth qwerty@gmail.com qwerty123")
 
 
 @dp.message(Command('auth'))
