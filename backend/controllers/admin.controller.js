@@ -17,5 +17,19 @@ class adminController {
       return res.status(500).json({ error: "Ошибка сервера" });
     }
   }
+  async getAllNews(req, res){
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Admin") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
+    try {
+      const news = await News.find({ organization: userOrganization });
+      res.json(news)
+    } catch (error) {
+      console.error('Ошибка при получении новостей:', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
+    }
+  }
 }
 module.exports = new adminController();
