@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'ekbartedinfo@gmail.com',
-    pass: 'habatonchik52'
+    pass: 'bqlj vmty xbsu kshn'
   }
 });
 
@@ -66,7 +66,7 @@ class leaderController {
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
-        subject: 'habatonchik52',
+        subject: 'bqlj vmty xbsu kshn',
         text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
       };
       transporter.sendMail(mailOptions, (error, info) => {
@@ -205,7 +205,7 @@ class leaderController {
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
-        subject: 'Пароль для доступа',
+        subject: 'bqlj vmty xbsu kshn',
         text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
       };
       transporter.sendMail(mailOptions, (error, info) => {
