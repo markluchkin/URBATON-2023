@@ -223,9 +223,14 @@ class leaderController {
     }
   }
   
-  static async getAllAdmins(req, res){
+  async getAllAdmins(req, res){
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Leader") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
     try{
-      const admins = await Admin.find({});
+      const admins = await Admin.find({organization: userOrganization});
       res.join(admins)
     } catch (error){
       console.error('Error retrieving students:', error);
@@ -233,9 +238,14 @@ class leaderController {
     }
   }
 
-  static async getAllTeachers(req, res){
+  async getAllTeachers(req, res){
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Leader") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
     try{
-      const teachers = await Teacher.find({});
+      const teachers = await Teacher.find({organization: userOrganization});
       res.join(teachers)
     } catch (error){
       console.error('Error retrieving students:', error);
@@ -243,9 +253,14 @@ class leaderController {
     }
   }
 
-  static async getAllParents(req, res){
+  async getAllParents(req, res){
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Leader") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
     try{
-      const parents = await Parent.find({});
+      const parents = await Parent.find({organization: userOrganization});
       res.join(parents)
     } catch (error){
       console.error('Error retrieving students:', error);
@@ -253,9 +268,14 @@ class leaderController {
     }
   }
 
-  static async getAllStudents(req, res){
+  async getAllStudents(req, res){
+    const userOrganization = req.user.organization;
+    const userRole = req.user.role;
+    if (userRole !== "Leader") {
+      return res.status(403).json({ error: "В доступе отказано." });
+    }
     try{
-      const students = await Student.find({});
+      const students = await Student.find({organization: userOrganization});
       res.join(students)
     } catch (error){
       console.error('Error retrieving students:', error);

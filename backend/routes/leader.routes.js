@@ -64,4 +64,9 @@ router.post('/createUser', [
     .withMessage("Организация не может быть пустой"),
 ], authenticateToken, leaderController.createUser);
 
+router.get('/getAdmin', authenticateToken, leaderController.getAllAdmins);
+router.get('/getStudent', authenticateToken, leaderController.getAllStudents);
+router.get('/getTeacher', authenticateToken, leaderController.getAllTeachers);
+router.get('/getParent', authenticateToken, leaderController.getAllParents);
+
 module.exports = router;
