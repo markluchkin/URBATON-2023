@@ -231,7 +231,7 @@ class leaderController {
     }
     try{
       const admins = await Admin.find({organization: userOrganization});
-      res.join(admins)
+      res.json(admins)
     } catch (error){
       console.error('Error retrieving students:', error);
       res.status(500).json({ error: 'Something went wrong' });
@@ -246,7 +246,7 @@ class leaderController {
     }
     try{
       const teachers = await Teacher.find({organization: userOrganization});
-      res.join(teachers)
+      res.json(teachers)
     } catch (error){
       console.error('Error retrieving students:', error);
       res.status(500).json({ error: 'Something went wrong' });
@@ -261,7 +261,7 @@ class leaderController {
     }
     try{
       const parents = await Parent.find({organization: userOrganization});
-      res.join(parents)
+      res.json(parents)
     } catch (error){
       console.error('Error retrieving students:', error);
       res.status(500).json({ error: 'Something went wrong' });
@@ -276,7 +276,7 @@ class leaderController {
     }
     try{
       const students = await Student.find({organization: userOrganization});
-      res.join(students)
+      res.json(students)
     } catch (error){
       console.error('Error retrieving students:', error);
       res.status(500).json({ error: 'Something went wrong' });
