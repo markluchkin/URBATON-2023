@@ -14,6 +14,7 @@ DB = CLUSTER["test"]
 organization = ""
 chat_id = 0
 
+
 async def get_action_keyboard():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = [KeyboardButton(text="Расписание на всю неделю"), KeyboardButton(text="Расписание на день")]
