@@ -46,6 +46,12 @@ router.post('/createUser', [
     .not()
     .isEmpty()
     .withMessage("Пароль не может быть пустым"),
+  check("role")
+    .exists()
+    .withMessage("Требуется роль")
+    .not()
+    .isEmpty()
+    .withMessage("Роль не может быть пустой"),
 ], leaderController.createUser);
 
 module.exports = router;

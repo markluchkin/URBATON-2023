@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const generatePassword = require("generate-password");
 const Leader = require("../models/Leader");
+const Admin = require("../models/Admin");
+const Teacher = require("../models/Teacher");
+const Parent = require("../models/Parent");
+const Student = require("../models/Student");
 const { validationResult } = require("express-validator");
 const mongoose = require("../db");
 
@@ -131,6 +135,7 @@ class leaderController {
         case "Admin":
           const newAdmin = new Admin({
           name: name,
+          surname: surname,
           email: email,
           phone: phone,
           password: hashedPassword})
@@ -140,6 +145,7 @@ class leaderController {
         case "Teacher":
           const newTeacher = new Teacher({
           name: name,
+          surname: surname,
           email: email,
           phone: phone,
           password: hashedPassword})
@@ -149,6 +155,7 @@ class leaderController {
         case "Parent":
           const newParent = new Parent({
           name: name,
+          surname: surname,
           email: email,
           phone: phone,
           password: hashedPassword})
@@ -158,6 +165,7 @@ class leaderController {
         case "Student":
           const newStudent = new Student({
           name: name,
+          surname: surname,
           email: email,
           phone: phone,
           password: hashedPassword})
