@@ -24,4 +24,28 @@ router.post('/signup', [
     .withMessage("Пароль не может быть пустым"),
 ], leaderController.signup);
 
+router.post('/createUser', [
+  check("name")
+    .exists()
+    .withMessage("Требуется имя пользователя"),
+  check("surname")
+    .exists()
+    .withMessage("Требуется фамилия пользователя"),
+  check("email")
+    .exists()
+    .withMessage("Требуется Email")
+    .isEmail()
+    .withMessage("Неверный email")
+    .not()
+    .isEmpty()
+    .withMessage("Email не может быть пустым")
+    .normalizeEmail(),
+  check("phone")
+    .exists()
+    .withMessage("Требуется телефон")
+    .not()
+    .isEmpty()
+    .withMessage("Пароль не может быть пустым"),
+], leaderController.createUser);
+
 module.exports = router;
