@@ -2,13 +2,15 @@ import asyncio
 import pymongo
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message, ContentType
-from config import TOKEN, COLLECTION
+from aiogram.types import Message
+from config import TOKEN, DB_URL
 
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-
+CLUSTER = pymongo.MongoClient(DB_URL)
+DB = CLUSTER["test"]
+COLLECTION = DB["leaders"]
 
 @dp.message(CommandStart())
 async def start(message: Message):
@@ -19,10 +21,13 @@ async def start(message: Message):
 @dp.message()
 async def authorize(message: Message):
     login, password = message.text.split()
-    if check_user(COLLECTION, login, password):
+    check = check_user(DB, login, password)
+    if check:
         await message.answer(text="Авторизация прошла успешно")
+        print(check)
     else:
         await message.answer(text="Не удалось авторизоваться")
+
 
 
 async def main() -> None:
@@ -31,8 +36,13 @@ async def main() -> None:
     await dp.start_polling(bot)
 
 
-def check_user(coll, login, password):
-    return list(coll.find({'email': login, 'password': password}))
+def check_user(db, login, password):
+    for coll in db.list_collection_names():
+        collection = db[coll]
+        check = list(collection.find({'email': login, 'password': password}))
+        if check:
+            return (True, coll, check)
+    return
 
 
 if __name__ == '__main__':
