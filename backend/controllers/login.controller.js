@@ -119,6 +119,25 @@ class loginController {
       res.status(500).json({ message: "Ошибка сервера" });
     }
   }
+  async getAllInfoStudent(req, res){
+    const studentId = req.params.studentId; // Получаем ID студента из параметров запроса
+
+    try {
+        const student = await Student.findById(studentId)
+        .populate("marks") // Заполняем массив оценок объектами Mark
+        .populate("timetable"); // Заполняем массив расписания объектами Lesson
+
+      if (!student) {
+        return res.status(404).json({ message: "Студент не найден" });
+      }
+
+      res.json(student);
+    } catch (error) {
+      console.error("Ошибка при получении информации о студенте:", error);
+      res.status(500).json({ error: "Ошибка сервера" });
+    }
+
+  }
 
 }
 
