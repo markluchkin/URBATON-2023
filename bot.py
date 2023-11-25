@@ -1,7 +1,7 @@
 import asyncio
 import pymongo
 from aiogram import Bot, Dispatcher
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from config import TOKEN, DB_URL
 
@@ -15,20 +15,20 @@ is_user_authorized = False
 @dp.message(CommandStart())
 async def start(message: Message):
     user_full_name = message.from_user.full_name
-    await message.answer(f"Здравствуйте, {user_full_name}. Чтобы продолжить, введите ваш логин и пароль через пробел.")
+    await message.answer(f"Здравствуйте, {user_full_name}. Чтобы продолжить, введите: /auth <ваш логин> <ваш пароль> через пробел.")
 
 
-if not(is_user_authorized):
-    @dp.message()
-    async def authorize(message: Message):
-        login, password = message.text.split()
-        check = check_user(DB, login, password)
-        if check:
-            await message.answer(text="Авторизация прошла успешно")
-            print(check[0]['organization'])
-            is_user_authorized = True
-        else:
-            await message.answer(text="Не удалось авторизоваться")
+@dp.message(Command('auth'))
+async def authorize(message: Message):
+    text = message.text.split()
+    login, password = text[1], text[2]
+    check = check_user(DB, login, password)
+    if check:
+        await message.answer(text="Авторизация прошла успешно")
+        print(check[0]['organization'])
+        is_user_authorized = True
+    else:
+        await message.answer(text="Не удалось авторизоваться")
 
 
 async def main() -> None:
