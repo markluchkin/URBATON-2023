@@ -59,7 +59,7 @@ class leaderController {
       });
       await newLeader.save();
       const token = jwt.sign(
-        { userId: newLeader._id, email: newLeader.email , role: role, organization: organization},
+        { userId: newLeader._id, email: newLeader.email , role: "Leader", organization: organization},
         "pryanik",
         { expiresIn: "7d" }
       );
