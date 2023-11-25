@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "../index.html";
+        }
+    </script>
+    <style>
+        body * {
+            box-sizing: border-box;
+        }
+        table * {
+            transition: all ease .5s;
+        }
+        .header {
+            background-color: #0e4bf1be;
+            color: white;
+            font-size: 1.5em;
+            padding: 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all ease .5s;
+        }
+        body.dark .header {
+            transition: all ease .5s;
+            background-color: #242526;
+        }
+
+        img {
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+            
+        }
+        body.dark img {
+            filter: brightness(60%);
+            border: 1px solid #707070;
+        }
+
+        .table-users {
+            border: 1px solid #707070;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+            max-width: calc(100% - 2em);
+            margin: 1em auto;
+            overflow: hidden;
+            width: 800px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table td,
+        table th {
+            color: #707070;
+            padding: 10px;
+        }
+
+        table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        table td:last-child {
+            font-size: 0.95em;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #4286f480;
+            font-weight: 300;
+        }
+
+        body.dark table th {
+            background-color: #7070701f;
+            
+            font-weight: 300;
+        }
+
+        table tr:nth-child(2n) {
+            background-color: white;
+        }
+
+        body.dark table tr:nth-child(2n) {
+            background-color: #3a3b3c;
+        }
+
+        table tr:nth-child(2n+1) {
+            background-color: #4286f43a;
+        }
+
+        body.dark table tr:nth-child(2n+1) {
+            background-color: #7070701f;
+        }
+
+        body.dark table * {
+            color: #8a8a8a;
+            ;
+        }
+
+        @media screen and (max-width: 700px) {
+
+            table,
+            tr,
+            td {
+                display: block;
+            }
+
+            td:first-child {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100px;
+            }
+
+            td:not(:first-child) {
+                clear: both;
+                margin-left: 100px;
+                padding: 4px 20px 4px 90px;
+                position: relative;
+                text-align: left;
+            }
+
+            td:not(:first-child):before {
+                color: #91ced4;
+                content: "";
+                display: block;
+                left: 0;
+                position: absolute;
+            }
+
+            td:nth-child(2):before {
+                content: "Name:";
+            }
+
+            td:nth-child(3):before {
+                content: "Email:";
+            }
+
+            td:nth-child(4):before {
+                content: "Phone:";
+            }
+
+            td:nth-child(5):before {
+                content: "Comments:";
+            }
+
+            tr {
+                padding: 10px 0;
+                position: relative;
+            }
+
+            tr:first-child {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            .header {
+                background-color: transparent;
+                color: white;
+                font-size: 2em;
+                font-weight: 700;
+                padding: 0;
+                text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            img {
+                border: 3px solid;
+                border-color: #daeff1;
+                height: 100px;
+                margin: 0.5rem 0;
+                width: 100px;
+            }
+
+            td:first-child {
+                background-color: #c8e7ea;
+                border-bottom: 1px solid #91ced4;
+                border-radius: 10px 10px 0 0;
+                position: relative;
+                top: 0;
+                transform: translateY(0);
+                width: 100%;
+            }
+
+            td:not(:first-child) {
+                margin: 0;
+                padding: 5px 1em;
+                width: 100%;
+            }
+
+            td:not(:first-child):before {
+                font-size: 0.8em;
+                padding-top: 0.3em;
+                position: relative;
+            }
+
+            td:last-child {
+                padding-bottom: 1rem !important;
+            }
+
+            tr {
+                background-color: white !important;
+                border: 1px solid #0e4bf1be;
+                border-radius: 10px;
+                box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+                margin: 0.5rem 0;
+                padding: 0;
+            }
+
+            .table-users {
+                border: none;
+                box-shadow: none;
+                overflow: visible;
+            }
+        }
+
+        .pdfobject-container {
+            height: 30rem;
+            border: 1rem solid rgba(0, 0, 0, 0.1);
+        }
+
+        .trigger:hover {
+            cursor: pointer;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 0vh;
+            background-color: transparent;
+            overflow: hidden;
+            transition: background-color 0.25s ease;
+            z-index: 9999;
+        }
+
+        .modal.open {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: background-color 0.25s;
+        }
+
+        .modal.open>.content-wrapper {
+            transform: scale(1);
+        }
+
+        .modal .content-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 400px;
+            margin: 0;
+            padding: 2.5rem;
+            background-color: white;
+            border-radius: 0.3125rem;
+            box-shadow: 0 0 2.5rem rgba(0, 0, 0, 0.5);
+            transform: scale(0);
+            transition: transform 0.25s;
+            transition-delay: 0.15s;
+        }
+
+        .modal .content-wrapper .close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: none;
+            background-color: transparent;
+            font-size: 1.5rem;
+            transition: 0.25s linear;
+        }
+
+        .modal .content-wrapper .close:before,
+        .modal .content-wrapper .close:after {
+            position: absolute;
+            content: "";
+            width: 1.25rem;
+            height: 0.125rem;
+            background-color: black;
+            transform: rotate(45deg);
+        }
+
+        .modal .content-wrapper .close:before {
+            transform: rotate(-45deg);
+        }
+
+        .account-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .account-list li {
+            margin-bottom: 10px;
+        }
+
+        .account-list span {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #4285f4;
+        }
+
+        .modal-header {
+            color: #0e4bf1be;
+            margin-bottom: 20px;
+        }
+    </style>
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+    <title>Leader Dashboard Panel</title>
+</head>
+
+<body style="overflow-x: hidden;">
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="../images/logo.jpg" alt="">
+            </div>
+
+            <span class="logo_name">Your school name</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="./schedule.html">
+                        <i class="uil uil-schedule"></i>
+                        <span class="link-name">Расписание</span>
+                    </a></li>
+                <li><a href="./diary.html">
+                        <i class="uil uil-book-open"></i>
+                        <span class="link-name">Электронный дневник</span>
+                    </a></li>
+                <li><a href="./teachers.html">
+                        <i class="uil uil-user-square"></i>
+                        <span class="link-name">Преподаватели</span>
+                    </a></li>
+                <li><a href="./admins.html">
+                        <i class="uil uil-user-plus"></i>
+                        <span class="link-name">Админы</span>
+                    </a></li>
+                <li><a href="./students.html">
+                        <i class="uil uil-book-reader"></i>
+                        <span class="link-name">Обучающиеся</span>
+                    </a></li>
+                <li><a href="./news.html">
+                        <i class="uil uil-newspaper"></i>
+                        <span class="link-name">Новости</span>
+                    </a></li>
+                <li><a href="./messages.html">
+                        <i class="uil uil-comments"></i>
+                        <span class="link-name">Сообщения</span>
+                    </a></li>
+                <li><a href="#">
+                        <button class="trigger" data-modal-trigger="trigger-1"
+                            style="background: transparent; padding: 0; margin: 0; border: 0; width: 100%; display: flex;">
+                            <i class="uil uil-user"></i>
+                            <span class="link-name">Аккаунт</span>
+                        </button>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="logout-mode">
+                <li><a href="#" onclick="localStorage.removeItem('token'); window.location.reload();">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Выйти</span>
+                    </a></li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                        <span class="link-name">Ночной режим</span>
+                    </a>
+
+                    <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="modal" data-modal="trigger-1">
+        <article class="content-wrapper">
+            <button class="close"></button>
+            <header class="modal-header">
+                <h2>Информация об аккаунте</h2>
+            </header>
+            <div class="content">
+                <ul class="account-list">
+                    <li><span>Имя пользователя:</span> exampleUser</li>
+                    <li><span>Email:</span> example@email.com</li>
+                    <li><span>Пароль:</span> password</li>
+                    <li><span>Id:</span> 7123863781678</li>
+                    <li><span>Роль:</span> user</li>
+
+                </ul>
+            </div>
+
+        </article>
+    </div>
+    <section class="dashboard">
+        <div class="top">
+
+            <i class="uil uil-bars sidebar-toggle"></i>
+            <div class="search-box">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Поиск по сайту...">
+            </div>
+        </div>
+        <div class="dash-content">
+            <div class="overview">
+                <div class="table-users">
+                    <div class="header">Преподаватели</div>
+
+                    <table cellspacing="0">
+                        <tr>
+                            <th>Picture</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th width="230">Comments</th>
+                        </tr>
+
+                        <tr>
+                            <td><img src="https://yt3.googleusercontent.com/ytc/AOPolaS9HfeV0B7M3lIkTQnUkT5o5yjqg1JR_q274oeRgg=s900-c-k-c0x00ffffff-no-rj"
+                                    alt="" /></td>
+                            <td>Jane Doe</td>
+                            <td>jane.doe@foo.com</td>
+                            <td>01 800 2000</td>
+                            <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </td>
+                        </tr>
+
+                        <tr>
+                            <td><img src="https://yt3.googleusercontent.com/ytc/AOPolaS9HfeV0B7M3lIkTQnUkT5o5yjqg1JR_q274oeRgg=s900-c-k-c0x00ffffff-no-rj"
+                                    alt="" /></td>
+                            <td>John Doe</td>
+                            <td>john.doe@foo.com</td>
+                            <td>01 800 2000</td>
+                            <td>Blanditiis, aliquid numquam iure voluptatibus ut maiores explicabo ducimus neque,
+                                nesciunt rerum
+                                perferendis, inventore.</td>
+                        </tr>
+
+                        <tr>
+                            <td><img src="https://yt3.googleusercontent.com/ytc/AOPolaS9HfeV0B7M3lIkTQnUkT5o5yjqg1JR_q274oeRgg=s900-c-k-c0x00ffffff-no-rj"
+                                    alt="" /></td>
+                            <td>Jane Smith</td>
+                            <td>jane.smith@foo.com</td>
+                            <td>01 800 2000</td>
+                            <td> Culpa praesentium unde pariatur fugit eos recusandae voluptas.</td>
+                        </tr>
+
+                        <tr>
+                            <td><img src="https://yt3.googleusercontent.com/ytc/AOPolaS9HfeV0B7M3lIkTQnUkT5o5yjqg1JR_q274oeRgg=s900-c-k-c0x00ffffff-no-rj"
+                                    alt="" /></td>
+                            <td>John Smith</td>
+                            <td>john.smith@foo.com</td>
+                            <td>01 800 2000</td>
+                            <td>Aut voluptatum accusantium, eveniet, sapiente quaerat adipisci consequatur maxime
+                                temporibus quas,
+                                dolorem impedit.</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+
+    </section>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">
+
+    <div class="footer">
+        <div class="row">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a>
+            <a href="#"><i class="fa fa-youtube"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+        </div>
+
+        <div class="row">
+            <ul>
+                <li><a href="#">Contact us</a></li>
+                <li><a href="#">Our Services</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="#">Career</a></li>
+            </ul>
+        </div>
+
+        <div class="row">
+            &copy; 2023 Музыкальная школа. Все права защищены.
+        </div>
+    </div>
+    </footer>
+
+
+    <script>
+
+        const body = document.querySelector("body"),
+            modeToggle = body.querySelector(".mode-toggle");
+        sidebar = body.querySelector("nav");
+        sidebarToggle = body.querySelector(".sidebar-toggle");
+
+        let getMode = localStorage.getItem("mode");
+        if (getMode && getMode === "dark") {
+            body.classList.toggle("dark");
+        }
+
+        let getStatus = localStorage.getItem("status");
+        if (getStatus && getStatus === "close") {
+            sidebar.classList.toggle("close");
+        }
+
+        modeToggle.addEventListener("click", () => {
+            body.classList.toggle("dark");
+            if (body.classList.contains("dark")) {
+                localStorage.setItem("mode", "dark");
+            } else {
+                localStorage.setItem("mode", "light");
+            }
+        });
+
+        sidebarToggle.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+            if (sidebar.classList.contains("close")) {
+                localStorage.setItem("status", "close");
+            } else {
+                localStorage.setItem("status", "open");
+            }
+        });
+
+        const buttons = document.querySelectorAll('.trigger[data-modal-trigger]');
+
+        for (let button of buttons) {
+            modalEvent(button);
+        }
+
+        function modalEvent(button) {
+            button.addEventListener('click', () => {
+                const trigger = button.getAttribute('data-modal-trigger');
+                // console.log('trigger', trigger)
+                const modal = document.querySelector(`[data-modal=${trigger}]`);
+                console.log('modal', modal)
+                const contentWrapper = modal.querySelector('.content-wrapper');
+                const close = modal.querySelector('.close');
+
+                close.addEventListener('click', () => modal.classList.remove('open'));
+                modal.addEventListener('click', () => modal.classList.remove('open'));
+                contentWrapper.addEventListener('click', (e) => e.stopPropagation());
+
+                modal.classList.toggle('open');
+            });
+        }
+    </script>
+
+</body>
+
+</html>

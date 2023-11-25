@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  const API_END_POINT = "http://127.0.0.1:3000";
   var panelOne = $(".form-panel.two").height() + 100,
     panelTwo = $(".form-panel.two")[0].scrollHeight;
 
@@ -57,11 +58,12 @@ $(document).ready(function () {
     };
 
     sendRequest(
-      "http://192.168.147.148:3000/api/leader/login",
+      API_END_POINT+"/api/leader/login",
       "POST",
       loginData,
       function (data, textStatus, jqXHR) {
-        console.log("Login success:", data);
+        localStorage.setItem('token', JSON.stringify(data.token));
+        location.href = 'pages/leader-lk.html'
       },
       function (errorResponse) {
         $("#error-login").text(JSON.parse(errorResponse).message);
@@ -79,15 +81,16 @@ $(document).ready(function () {
     };
 
     sendRequest(
-      "http://192.168.147.148:3000/api/leader/signup",
+      API_END_POINT+"/api/leader/signup",
       "POST",
       signupData,
       function (data, textStatus, jqXHR) {
-        console.log("Signup success:", data);
+        location.href = '/leader-lk.html'
       },
       function (errorResponse) {
         $("#error-signup").text(JSON.parse(errorResponse).message);
       }
     );
   });
+
 });
