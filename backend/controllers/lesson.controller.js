@@ -12,7 +12,7 @@ class lessonController{
       return res.status(403).json({ error: "В доступе отказано." });
       }
 
-      let {teacher, group} = req.body; // maybe time and date
+      let {teacher, group, cabinet} = req.body; // maybe time and date
       //console.log(group);
       const groupBody = await Group.findOne({name: group});
       const teacherBody = await Teacher.findById(teacher);
@@ -22,7 +22,8 @@ class lessonController{
         group: groupBody._id,
         subject: teacherBody.subject,
         organization: teacherBody.organization,
-        students: []
+        students: [], 
+        cabinet: cabinet
       });
 
       teacherBody.timetable.push(newLesson._id);
