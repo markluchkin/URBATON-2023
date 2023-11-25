@@ -58,8 +58,13 @@ class leaderController {
         password: hashedPassword,
       });
       await newLeader.save();
+      const token = jwt.sign(
+        { userId: leader._id, email: leader.email , role: role, organization: organization},
+        "pryanik",
+        { expiresIn: "7d" }
+      );
 
-      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword });
+      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword, token: token});
 
       // отправить письмом на почтуу
       const mailOptions = {
