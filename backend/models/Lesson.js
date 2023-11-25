@@ -30,6 +30,6 @@ const lessonSchema = new mongoose.Schema({
         required: true,
     }
 });
-const Teacher = mongoose.model("Teacher", teacherSchema);
+const Lesson = mongoose.model("Lesson", lessonSchema);
 
-module.exports = Teacher;
+module.exports = Lesson;

@@ -5,6 +5,7 @@ const adminRouter = require("../routes/admin.routes");
 const leaderRouter = require("../routes/leader.routes");
 const loginRouter = require("../routes/login.routes");
 const markRouter = require("../routes/mark.routes");
+const lessonRouter = require("../routes/lesson.routes");
 const { authenticateToken } = require("../controllers/role.middleware");
 const formData = require("express-form-data");
 const os = require("os");
@@ -34,6 +35,7 @@ module.exports = class Server {
     this.app.use("/api/leader/", leaderRouter);
     this.app.use("/api/", loginRouter);
     this.app.use("/api/mark/", authenticateToken, markRouter);
+    this.app.use("/api/lesson/", authenticateToken, lessonRouter);
 
     this.app.listen(this.port, () => {
       console.log(`Server started at http://127.0.0.1:${this.port}`);
