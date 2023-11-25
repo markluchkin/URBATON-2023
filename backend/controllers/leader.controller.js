@@ -67,7 +67,7 @@ class leaderController {
         from: 'ekbartedinfo@gmail.com',
         to: email,
         subject: '«Art Education Info» — пароль от личного кабинета',
-        text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
+        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'что-то еще можно добавить'
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
