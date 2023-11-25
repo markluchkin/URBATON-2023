@@ -5,9 +5,6 @@ const router = new Router();
 const { authenticateToken } = require("../controllers/role.middleware");
 
 router.post('/signup', [
-  check("name")
-    .exists()
-    .withMessage("Требуется имя организации"),
   check("email")
     .exists()
     .withMessage("Требуется Email")
@@ -23,6 +20,12 @@ router.post('/signup', [
     .not()
     .isEmpty()
     .withMessage("Пароль не может быть пустым"),
+  check("organization")
+    .exists()
+    .withMessage("Требуется организация")
+    .not()
+    .isEmpty()
+    .withMessage("Организация не может быть пустой"),
 ], leaderController.signup);
 
 router.post('/createUser', [
@@ -53,6 +56,12 @@ router.post('/createUser', [
     .not()
     .isEmpty()
     .withMessage("Роль не может быть пустой"),
+    check("organization")
+    .exists()
+    .withMessage("Требуется организация")
+    .not()
+    .isEmpty()
+    .withMessage("Организация не может быть пустой"),
 ], authenticateToken, leaderController.createUser);
 
 module.exports = router;
