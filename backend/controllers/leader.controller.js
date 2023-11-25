@@ -71,7 +71,7 @@ class leaderController {
         from: 'ekbartedinfo@gmail.com',
         to: email,
         subject: '«Art Education Info» — пароль от личного кабинета',
-        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'что-то еще можно добавить'
+        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается, вы не получите ответа.'
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -211,7 +211,7 @@ class leaderController {
         from: 'ekbartedinfo@gmail.com',
         to: email,
         subject: 'Art Education Info» — пароль от личного кабинета',
-        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'что-то еще можно добавить'
+        text: 'Добро пожаловать! \nВаш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + 'Не отвечайте на это сообщение. Этот почтовый ящик не отслеживается, вы не получите ответа.'
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
