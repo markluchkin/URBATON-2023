@@ -9,6 +9,17 @@ const Student = require("../models/Student");
 const { validationResult } = require("express-validator");
 const mongoose = require("../db");
 
+// MAILER: password -> user
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'ekbartedinfo@gmail.com',
+    pass: 'habatonchik52'
+  }
+});
+
+
 class leaderController {
   async signup(req, res) {
     const { name, email, phone } = req.body;
@@ -37,7 +48,7 @@ class leaderController {
         uppercase: true,
         excludeSimilarCharacters: true,
       });
-      // отправить письмом на почтуу
+      
       const hashedPassword = await bcrypt.hash(generatedPassword, 10);
       console.log(email, generatedPassword);
 
@@ -50,6 +61,22 @@ class leaderController {
       await newLeader.save();
 
       res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword});
+
+      // отправить письмом на почтуу
+      const mailOptions = {
+        from: 'ekbartedinfo@gmail.com',
+        to: email,
+        subject: 'habatonchik52',
+        text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Письмо успешно отправлено: ' + info.response);
+        }
+      });
+
       console.log("Успешное оформление заявки");
     } catch (error) {
       console.log("Error creating leader:", error);
@@ -126,8 +153,6 @@ class leaderController {
         excludeSimilarCharacters: true,
       });
 
-      // отправить письмом на почтуу
-
       const hashedPassword = await bcrypt.hash(generatedPassword, 10);
       console.log(email, generatedPassword);
 
@@ -172,10 +197,25 @@ class leaderController {
           await newStudent.save()
           break  
           
-      }
-      
+      } 
 
       res.status(201).json({ message: "Успешная регистрация пользователя", password: generatedPassword, role: role});
+
+       // отправить письмом на почтуу
+      const mailOptions = {
+        from: 'ekbartedinfo@gmail.com',
+        to: email,
+        subject: 'Пароль для доступа',
+        text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Письмо успешно отправлено: ' + info.response);
+        }
+      });
+
       console.log("Успешная регистрация пользователя");
     } catch (error) {
       console.log("Error creating user:", error);
