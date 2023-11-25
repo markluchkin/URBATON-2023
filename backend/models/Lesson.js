@@ -28,6 +28,10 @@ const lessonSchema = new mongoose.Schema({
     organization: {
         type: String,
         required: true,
+    },
+    cabinet: {
+        type: String,
+        required: true,
     }
 });
 const Lesson = mongoose.model("Lesson", lessonSchema);
