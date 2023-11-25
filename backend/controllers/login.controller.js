@@ -34,7 +34,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: leader._id, email: leader.email },
+                { userId: leader._id, email: leader.email , role: role},
                 "pryanik",
                 { expiresIn: "7d" }
               );
@@ -50,7 +50,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: parent._id, email: parent.email },
+                { userId: parent._id, email: parent.email , role: role},
                 "pryanik",
                 { expiresIn: "7d" }
               );
@@ -66,7 +66,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: teacher._id, email: teacher.email },
+                { userId: teacher._id, email: teacher.email , role: role },
                 "pryanik",
                 { expiresIn: "7d" }
               );
@@ -82,7 +82,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: student._id, email: student.email },
+                { userId: student._id, email: student.email , role: role },
                 "pryanik",
                 { expiresIn: "7d" }
               );
@@ -98,7 +98,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: admin._id, email: admin.email },
+                { userId: admin._id, email: admin.email , role: role },
                 "pryanik",
                 { expiresIn: "7d" }
               );
