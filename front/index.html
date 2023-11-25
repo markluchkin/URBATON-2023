@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Добро пожаловать!</title>
+<style>
+  body {
+    overflow: hidden;
+  }
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form">
+        <div class="form-toggle"></div>
+        <div class="form-panel one">
+          <div class="form-header">
+            <h1>Логин</h1>
+          </div>
+          <div class="form-content">
+            <form>
+                <div id="error-login">
+                    
+                </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required="required"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="password">Пароль</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required="required"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-remember">
+                  <input type="checkbox" />Remember Me </label
+                ><a class="form-recovery" href="#">Забыли пароль?</a>
+              </div>
+              <div class="form-group">
+                <button id="login" type="submit">Авторизоваться</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="form-panel two">
+            
+          <div class="form-header">
+            <h1>Регистрация учереждения</h1>
+          </div>
+          <div class="form-content">
+            <form>
+                <div id="error-signup">
+                    
+                </div>
+              <div class="form-group">
+                <label for="username">Название организации</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Контактный Email</label>
+                <input
+                  type="email"
+                  id="email-sign"
+                  name="email"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <label for="phone">Контактный телефон</label>
+                <input
+                  type="phone"
+                  id="phone-sign"
+                  name="phone"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <button id="signup" type="submit">Оставить заявку</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./script/script.js"></script>
+  </body>
+</html>
