@@ -44,7 +44,6 @@ class leaderController {
       const generatedPassword = generatePassword.generate({
         length: 10,
         numbers: true,
-        symbols: true,
         uppercase: true,
         excludeSimilarCharacters: true,
       });
@@ -86,17 +85,12 @@ class leaderController {
 
   async createUser(req, res) {
     const userOrganization = req.user.organization;
+    console.log(userOrganization);
     const userRole = req.user.role;
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
     const { name, surname, email, role, phone } = req.body;
-    const validator = validationResult(req);
-    if (!validator.isEmpty()) {
-      res.status(401).json(validator.errors.shift());
-      console.log(validator.errors.shift())
-      return;
-    }
     try {
       const existingAdmin = await Admin.findOne({
         $or: [
@@ -147,7 +141,6 @@ class leaderController {
       const generatedPassword = generatePassword.generate({
         length: 10,
         numbers: true,
-        symbols: true,
         uppercase: true,
         excludeSimilarCharacters: true,
       });

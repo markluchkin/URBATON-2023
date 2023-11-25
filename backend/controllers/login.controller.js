@@ -26,6 +26,7 @@ class loginController {
           const student = await Student.findOne({ email });
           const admin = await Admin.findOne({ email });
           if (leader) {
+            let organization = leader.organization;
             role = "Leader";
             const isPasswordValid = await bcrypt.compare(password, leader.password);
             if (!isPasswordValid) {
@@ -34,7 +35,7 @@ class loginController {
                 return;
               }
               const token = jwt.sign(
-                { userId: leader._id, email: leader.email , role: role},
+                { userId: leader._id, email: leader.email , role: role, organization: organization},
                 "pryanik",
                 { expiresIn: "7d" }
               );
