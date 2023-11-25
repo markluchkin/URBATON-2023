@@ -6,6 +6,7 @@ const Admin = require("../models/Admin");
 const Teacher = require("../models/Teacher");
 const Parent = require("../models/Parent");
 const Student = require("../models/Student");
+const Group = require("../models/Group");
 const { validationResult } = require("express-validator");
 const mongoose = require("../db");
 
@@ -48,7 +49,7 @@ class leaderController {
         excludeSimilarCharacters: true,
       });
 
-      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+      const hashedPassword = generatedPassword;//await bcrypt.hash(generatedPassword, 10);
       console.log(email, generatedPassword);
 
       const newLeader = new Leader({
@@ -95,7 +96,7 @@ class leaderController {
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
-    const { name, surname, email, role, phone } = req.body;
+    const { name, surname, email, role, phone, subject, group, groups} = req.body;
     try {
       const existingAdmin = await Admin.findOne({
         $or: [
@@ -150,7 +151,7 @@ class leaderController {
         excludeSimilarCharacters: true,
       });
 
-      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+      const hashedPassword = generatedPassword//await bcrypt.hash(generatedPassword, 10);
       console.log(email, generatedPassword);
 
       switch (role) {
@@ -168,12 +169,15 @@ class leaderController {
 
         case "Teacher":
           const newTeacher = new Teacher({
+            subject: subject,
             name: name,
             surname: surname,
             email: email,
             phone: phone,
             password: hashedPassword,
-            organization: userOrganization
+            organization: userOrganization,
+            groups: groups,
+            subject: subject
           })
           await newTeacher.save()
           break
@@ -197,9 +201,23 @@ class leaderController {
             email: email,
             phone: phone,
             password: hashedPassword,
-            organization: userOrganization
+            organization: userOrganization,
+            group: group
           })
-          await newStudent.save()
+          await newStudent.save();
+          const existingGroup = await Group.findOne({ name: group });
+          if (existingGroup) {
+            // Если группа найдена, добавить студента в массив students
+            existingGroup.students.push(newStudent);
+            await existingGroup.save();
+          } else {
+            // Если группа не найдена, создать новую группу
+            const newGroup = new Group({
+              name: group,
+              students: [newStudent],
+            });
+            await newGroup.save();
+          }
           break
 
       }

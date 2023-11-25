@@ -32,8 +32,7 @@ const studentSchema = new mongoose.Schema({
     type: String,
   },
   group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Group",
+    type: String
   },
   instrument: {
     type: String,

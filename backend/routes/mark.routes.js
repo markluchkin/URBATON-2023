@@ -2,7 +2,7 @@ const { Router } = require("express");
 const markController = require("../controllers/mark.controller.js");
 const { check } = require("express-validator");
 const router = new Router();
-
+const { authenticateToken } = require("../controllers/role.middleware");
 
 router.post('/create', [
   check("subject")
@@ -31,5 +31,6 @@ router.post('/create', [
     .withMessage("Учитель не может быть пустым"),
 ], markController.createMark);
 
+router.get('/getGroups', authenticateToken, markController.getGroupsByTeacher);
 
 module.exports = router;

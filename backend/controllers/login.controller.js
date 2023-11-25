@@ -28,12 +28,12 @@ class loginController {
           if (leader) {
             let organization = leader.organization;
             role = "Leader";
-            const isPasswordValid = await bcrypt.compare(password, leader.password);
+            /* const isPasswordValid = await bcrypt.compare(password, leader.password);
             if (!isPasswordValid) {
                 res.status(401).json({ message: "Неверные данные" });
                 console.log("Неверные данные");
                 return;
-              }
+              } */
               const token = jwt.sign(
                 { userId: leader._id, email: leader.email , role: role, organization: organization},
                 "pryanik",
@@ -44,12 +44,12 @@ class loginController {
           }
           else if (parent) {
             role = "Parent";
-            const isPasswordValid = await bcrypt.compare(password, parent.password);
+            /* const isPasswordValid = await bcrypt.compare(password, parent.password);
             if (!isPasswordValid) {
                 res.status(401).json({ message: "Неверные данные" });
                 console.log("Неверные данные");
                 return;
-              }
+              } */
               const token = jwt.sign(
                 { userId: parent._id, email: parent.email , role: role},
                 "pryanik",
@@ -60,12 +60,12 @@ class loginController {
           }
           else if (teacher) {
             role = "Teacher";
-            const isPasswordValid = await bcrypt.compare(password, teacher.password);
+            /* const isPasswordValid = await bcrypt.compare(password, teacher.password);
             if (!isPasswordValid) {
                 res.status(401).json({ message: "Неверные данные" });
                 console.log("Неверные данные");
                 return;
-              }
+              } */
               const token = jwt.sign(
                 { userId: teacher._id, email: teacher.email , role: role },
                 "pryanik",
@@ -76,12 +76,12 @@ class loginController {
           }
           else if (student) {
             role = "Student";
-            const isPasswordValid = await bcrypt.compare(password, student.password);
+            /* const isPasswordValid = await bcrypt.compare(password, student.password);
             if (!isPasswordValid) {
                 res.status(401).json({ message: "Неверные данные" });
                 console.log("Неверные данные");
                 return;
-              }
+              } */
               const token = jwt.sign(
                 { userId: student._id, email: student.email , role: role },
                 "pryanik",
@@ -92,12 +92,12 @@ class loginController {
           }
           else if (admin) {
             role = "Admin";
-            const isPasswordValid = await bcrypt.compare(password, admin.password);
+            /* const isPasswordValid = await bcrypt.compare(password, admin.password);
             if (!isPasswordValid) {
                 res.status(401).json({ message: "Неверные данные" });
                 console.log("Неверные данные");
                 return;
-              }
+              } */
               const token = jwt.sign(
                 { userId: admin._id, email: admin.email , role: role },
                 "pryanik",

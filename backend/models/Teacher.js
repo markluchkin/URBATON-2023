@@ -39,8 +39,7 @@ const teacherSchema = new mongoose.Schema({
   ],
   groups: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Group",
+      type: String
     },
   ],
   organization: {

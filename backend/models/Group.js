@@ -10,4 +10,6 @@ const groupSchema = new mongoose.Schema({
         ref: "Student",
     }]
 })
-const Group = mongoose.model("Group", markSchema);
+const Group = mongoose.model("Group", groupSchema);
+
+module.exports = Group;
