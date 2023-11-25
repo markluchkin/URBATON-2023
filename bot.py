@@ -1,8 +1,6 @@
 import asyncio
 import pymongo
-import time
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.dispatcher.filters import Command, CommandStart
 from config import TOKEN, DB_URL
 
