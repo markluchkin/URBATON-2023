@@ -20,6 +20,9 @@ const markSchema = new mongoose.Schema({
     organization: {
         type: String,
         required: true,
+    },
+    comment: {
+        type: String,
     }
 })
 const Mark = mongoose.model("Mark", markSchema);
