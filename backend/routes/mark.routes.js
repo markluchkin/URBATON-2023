@@ -31,6 +31,6 @@ router.post('/create', [
     .withMessage("Учитель не может быть пустым"),
 ], markController.createMark);
 
-router.get('/getGroups', authenticateToken, markController.getGroupsByTeacher);
+router.get('/getGroups', markController.getGroupsByTeacher);
 
 module.exports = router;
