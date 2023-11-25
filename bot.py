@@ -10,7 +10,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 CLUSTER = pymongo.MongoClient(DB_URL)
 DB = CLUSTER["test"]
-is_user_authorized = False
+
 
 @dp.message(CommandStart())
 async def start(message: Message):
