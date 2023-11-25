@@ -15,13 +15,6 @@ organization = ""
 chat_id = 0
 
 
-async def get_action_keyboard():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = [KeyboardButton(text="Расписание на всю неделю"), KeyboardButton(text="Расписание на день")]
-    keyboard.add(*buttons)
-    return keyboard
-
-
 @dp.message_handler(CommandStart())
 async def start(message: types.Message):
     user_full_name = message.from_user.full_name
@@ -41,15 +34,19 @@ def check_user(db, login, password):
 
 def check_news(db):
     news = []
+    count = 0
     for i in db['news'].find({'organization': organization}):
         if chat_id not in i['sentTo']:
             news.append(i)
-    db['news'].update_many({'organization': organization}, {"$push": {"sentTo": chat_id}})
+            count += 1
+    if count:
+        db['news'].update_many({'organization': organization}, {"$push": {"sentTo": chat_id}})
     return news
 
 
 @dp.message_handler(Command('auth'))
 async def authorize(message: types.Message):
+
     global chat_id
     global organization
     chat_id = message.chat.id
@@ -57,7 +54,7 @@ async def authorize(message: types.Message):
     login, password = text[1], text[2]
     check = check_user(DB, login, password)
     if check:
-        await message.answer(text="Авторизация прошла успешно", reply_markup=await get_action_keyboard())
+        await message.answer(text="Авторизация прошла успешно")
         organization = check[0]['organization']
 
     else:
@@ -65,16 +62,16 @@ async def authorize(message: types.Message):
 
 
 @dp.message_handler(Command("go"))
-async def send_news(message):
+async def check_send_news(message):
     while True:
         DB = pymongo.MongoClient(DB_URL)["test"]
         news = check_news(DB)
         for i in news:
             await bot.send_message(chat_id, text=f"*{i['title']}*\n {i['text']}", parse_mode="Markdown")
-        time.sleep(30)
+        await asyncio.sleep(30)
 
 
-async def main() -> None:
+async def main():
     await dp.start_polling()
 
 
