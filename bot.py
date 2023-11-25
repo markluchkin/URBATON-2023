@@ -10,7 +10,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 CLUSTER = pymongo.MongoClient(DB_URL)
 DB = CLUSTER["test"]
-COLLECTION = DB["leaders"]
+
 
 @dp.message(CommandStart())
 async def start(message: Message):
@@ -24,10 +24,9 @@ async def authorize(message: Message):
     check = check_user(DB, login, password)
     if check:
         await message.answer(text="Авторизация прошла успешно")
-        print(check)
+        print(check[0]['organization'])
     else:
         await message.answer(text="Не удалось авторизоваться")
-
 
 
 async def main() -> None:
@@ -41,7 +40,7 @@ def check_user(db, login, password):
         collection = db[coll]
         check = list(collection.find({'email': login, 'password': password}))
         if check:
-            return (True, coll, check)
+            return check
     return
 
 
