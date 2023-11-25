@@ -45,7 +45,7 @@ class leaderController {
       });
       await newLeader.save();
 
-      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword });
+      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword});
       console.log("Успешное оформление заявки");
     } catch (error) {
       console.log("Error creating leader:", error);

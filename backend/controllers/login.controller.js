@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const generatePassword = require("generate-password");
 const Leader = require("../models/Leader");
 const Parent = require("../models/Parent");
 const Teacher = require("../models/Teacher");

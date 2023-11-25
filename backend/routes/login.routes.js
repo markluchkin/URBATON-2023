@@ -18,7 +18,7 @@ router.post('/login', [
     .withMessage("Требуется пароль")
     .not()
     .isEmpty()
-    .withMessage("Пароль не может быть пустым"),
-], loginController.signup);
+    .withMessage("Пароль не может быть пустым")
+], loginController.login);
 
 module.exports = router;
