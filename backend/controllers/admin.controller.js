@@ -1,4 +1,5 @@
 const News = require("../models/News");
+const mongoose = require("../db");
 // const { validationResult } = require("express-validator");
 
 class adminController {

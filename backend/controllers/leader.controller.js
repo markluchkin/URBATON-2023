@@ -7,6 +7,7 @@ const Parent = require("../models/Parent");
 const Student = require("../models/Student");
 const Group = require("../models/Group");
 const { validationResult } = require("express-validator");
+const mongoose = require("../db");
 
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({

@@ -2,7 +2,13 @@ const Mark = require("../models/Mark");
 const Student = require("../models/Student");
 const Teacher = require("../models/Teacher");
 const Group = require("../models/Group");
+async function fetchTeacherName(teacherId) {
+  const teacher = await Teacher.findById(teacherId);
+  return teacher ? teacher.name + " " + teacher.surname : 'Unknown Teacher';
+}
+
 class markController {
+
   async createMark(req, res) {
     try {
       const userRole = req.user.role;
@@ -11,13 +17,18 @@ class markController {
         return res.status(403).json({ error: "В доступе отказано." });
       }
       const { subject, value, studentId } = req.body;
-      const teacherId = req.user._id;
-
+      const teacherId = req.user.userId;
+      const teacher = await Teacher.findById(teacherId);
+      //console.log(teacher.subject);
+      const organization = req.user.organization;
+      //console.log(req.user);
+      console.log(teacherId);
       const newMark = new Mark({
-        subject: subject,
+        subject: teacher.subject,
         value: value,
         student: studentId,
         teacher: teacherId,
+        organization: organization,
       });
 
       await newMark.save();
@@ -84,6 +95,50 @@ class markController {
     }
   }
 
+  async getStudentMark(req, res) {
+    const { studentId } = req.body;
+
+  try {
+    const student = await Student.findById(studentId);
+
+    if (!student) {
+      return res.status(404).json({ message: 'Ученик не найден' });
+    }
+
+    const marks = await Mark.find({ student: studentId }).populate('teacher').exec();
+
+    const groupedMarks = {};
+    
+    for (const mark of marks) {
+      if (!groupedMarks[mark.subject]) {
+        groupedMarks[mark.subject] = [];
+      }
+
+      const teacherName = await fetchTeacherName(mark.teacher);
+      console.log(mark);
+      console.log(mark.teacher);
+      groupedMarks[mark.subject].push({
+        id: mark._id,
+        value: mark.value,
+        teacher: teacherName,
+      });
+    }
+
+    // Формируем массив для ответа
+    const resultArray = [];
+    for (const subject in groupedMarks) {
+      resultArray.push({
+        subject: subject, // Используем название предмета
+        marks: groupedMarks[subject], // Массив оценок для данного предмета
+      });
+    }
+
+    res.json(resultArray);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Ошибка сервера' });
+    }
+  }
 
 };
 

@@ -2,7 +2,6 @@ const { Router } = require("express");
 const markController = require("../controllers/mark.controller.js");
 const { check } = require("express-validator");
 const router = new Router();
-const { authenticateToken } = require("../controllers/role.middleware");
 
 router.post('/create', [
   check("subject")
@@ -32,5 +31,6 @@ router.post('/create', [
 ], markController.createMark);
 
 router.get('/getGroups', markController.getGroupsByTeacher);
+router.get('/getStudentMark', markController.getStudentMark);
 
 module.exports = router;
