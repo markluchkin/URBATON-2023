@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Mark = require("../models/Mark");
+const Student = require("../models/Student");
 class markController{
   async createMark(req, res){
     try {
@@ -13,14 +14,19 @@ class markController{
       const { subject, value, studentId } = req.body;
       const teacherId = req.user._id;
   
-      const mark = new Mark({
+      const newMark = new Mark({
         subject: subject,
         value: value,
         student: studentId,
         teacher: teacherId,
       });
-  
-      await mark.save();
+      await newMark.save();
+
+      await Student.findOneAndUpdate(
+        { _id: studentId },
+        { $push: { marks: newMark._id } },
+        { new: true }
+      );
   
       res.status(201).json({ message: "Оценка поставлена" });
     } catch (error) {
