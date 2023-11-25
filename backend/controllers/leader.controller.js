@@ -66,7 +66,7 @@ class leaderController {
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
-        subject: 'bqlj vmty xbsu kshn',
+        subject: '«Art Education Info» — пароль от личного кабинета',
         text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
       };
       transporter.sendMail(mailOptions, (error, info) => {
@@ -205,8 +205,8 @@ class leaderController {
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
         to: email,
-        subject: 'bqlj vmty xbsu kshn',
-        text: 'Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword
+        subject: 'Art Education Info» — пароль от личного кабинета',
+        text: 'Добро пожаловать! \n Ваш сгенерированный пароль для входа в ваш аккаунт: ' + generatedPassword + '\n \n' + ''
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
