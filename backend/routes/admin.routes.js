@@ -5,4 +5,6 @@ const router = new Router();
 
 router.get('/news', adminController.news);
 
+router.post('/news', adminController.createNews);
+
 module.exports = router;
