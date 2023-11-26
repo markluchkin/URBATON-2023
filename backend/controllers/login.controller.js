@@ -7,6 +7,41 @@ const Admin = require("../models/Admin");
 const { validationResult } = require("express-validator");
 const mongoose = require("../db");
 
+async function findUserById(userId) {
+  try {
+    const student = await Student.findById(userId);
+    if (student) {
+      return student;
+    }
+
+    const teacher = await Teacher.findById(userId);
+    if (teacher) {
+      return teacher;
+    }
+
+    const parent = await Parent.findById(userId);
+    if (parent) {
+      return parent;
+    }
+
+    const admin = await Admin.findById(userId);
+    if (admin) {
+      return admin;
+    }
+
+    const leader = await Leader.findById(userId);
+    if (leader) {
+      return leader;
+    }
+
+    return null;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Ошибка при поиске пользователя");
+  }
+}
+
+
 class loginController {
 
   async login(req, res) {
@@ -119,19 +154,35 @@ class loginController {
       res.status(500).json({ message: "Ошибка сервера" });
     }
   }
-  async getAllInfoStudent(req, res){
-    const studentId = req.params.studentId; // Получаем ID студента из параметров запроса
+  async getUserInfo(req, res){
+    const userId = req.user.userId;
 
     try {
-        const student = await Student.findById(studentId)
-        .populate("marks") // Заполняем массив оценок объектами Mark
-        .populate("timetable"); // Заполняем массив расписания объектами Lesson
+      findUserById(userId)
+      .then((user) => {
+        if (user) {
+          if (user.role == 'Leader'){
+            var name = user.organization
 
-      if (!student) {
-        return res.status(404).json({ message: "Студент не найден" });
-      }
+          }
+          else {
+            var name = user.name + ' ' + user.surname
 
-      res.json(student);
+          }
+          const email = user.email;
+          const phone = user.phone;
+          const role = user.role;
+          const id = user._id;
+
+          res.status(200).json({"name":name, "emal": email, "phone": phone, "role": role, "id": id});
+        } else {
+          res.status(404).json("Пользователь не найден")
+          console.log("Пользователь не найден");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     } catch (error) {
       console.error("Ошибка при получении информации о студенте:", error);
       res.status(500).json({ error: "Ошибка сервера" });

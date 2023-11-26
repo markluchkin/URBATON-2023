@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const adminRouter = require("../routes/admin.routes");
+const newsRouter = require("../routes/news.routes");
 const leaderRouter = require("../routes/leader.routes");
 const loginRouter = require("../routes/login.routes");
 const markRouter = require("../routes/mark.routes");
@@ -31,7 +31,7 @@ module.exports = class Server {
   start() {
     this.setup();
 
-    this.app.use("/api/admin/", adminRouter);
+    this.app.use("/api/news/", authenticateToken, newsRouter);
     this.app.use("/api/leader/", leaderRouter);
     this.app.use("/api/", loginRouter);
     this.app.use("/api/mark/", authenticateToken, markRouter);

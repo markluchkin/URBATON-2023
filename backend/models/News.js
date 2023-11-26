@@ -11,7 +11,6 @@ const newsSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
   },
   organization: {
     type: String,
