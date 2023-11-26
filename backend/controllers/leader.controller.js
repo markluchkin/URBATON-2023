@@ -64,7 +64,7 @@ class leaderController {
         { expiresIn: "7d" }
       );
 
-      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword, token: token });
+      res.status(201).json({ message: "Успешное оформление заявки", password: generatedPassword, token: token, organization: organization });
 
       const mailOptions = {
         from: 'ekbartedinfo@gmail.com',
