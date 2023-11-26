@@ -94,9 +94,17 @@ class loginController {
           token,
           userId: parent._id,
           role: role,
-          students: parent.students.map((student) => {
-            return { name: student.name + ' ' + student.surname, id: student._id };
-          }),
+          students: await Promise.all(parent.students.map(async (studentId) => {
+            try {
+              const studentBody = await Student.findById(studentId);
+              console.log(studentBody);
+              var name = studentBody.name + ' ' + studentBody.surname;
+              return { name: name, id: studentId };
+            } catch (error) {
+              console.error("Ошибка при получении данных студента:", error);
+              return { name: "Ошибка", id: studentId };
+            }
+          })),
         };
         res.status(200).json(responseData);
         //console.log(token);

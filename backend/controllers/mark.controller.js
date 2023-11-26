@@ -16,7 +16,7 @@ class markController {
       if (userRole !== "Teacher" && userRole !== "Admin" && userRole !== "Leader") {
         return res.status(403).json({ error: "В доступе отказано." });
       }
-      const { subject, value, studentId } = req.body;
+      const {value, studentId } = req.body; //subject
       const teacherId = req.user.userId;
       const teacher = await Teacher.findById(teacherId);
       //console.log(teacher.subject);

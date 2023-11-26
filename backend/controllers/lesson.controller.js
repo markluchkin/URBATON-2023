@@ -53,7 +53,7 @@ class lessonController{
 async getTeacherLessons(req, res){
   try{
     const userRole = req.user.role;
-    console.log(userRole);
+    /* console.log(userRole);
     let user;
     if (userRole == "Teacher") {
       user = await Teacher.findById(req.user.userId);
@@ -80,7 +80,54 @@ async getTeacherLessons(req, res){
       timetable,
     }));
 
-    res.json(lessonsArray);
+    res.json(lessonsArray); */
+
+    const formatDayLessons = (lessons) => {
+      const formattedLessons = {};
+
+      lessons.forEach((lesson) => {
+        const lessonTime = lesson.time;
+        const lessonSubject = lesson.subject;
+
+        if (!formattedLessons[lesson.day]) {
+          formattedLessons[lesson.day] = [];
+        }
+
+        formattedLessons[lesson.day].push(`${lessonTime}: ${lessonSubject}`);
+      });
+
+      return formattedLessons;
+    };
+    let lessons = [];
+
+    if (userRole === "Teacher") {
+      const teacherId = req.user._id;
+      const teacher = await Teacher.findById(teacherId).populate({
+        path: "timetable",
+        populate: {
+          path: "group",
+        },
+      });
+
+      if (teacher && teacher.timetable) {
+        lessons = formatDayLessons(teacher.timetable);
+      }
+    } else if (userRole === "Student") {
+      const studentId = req.user._id;
+      const student = await Student.findById(studentId).populate({
+        path: "lessons",
+        populate: {
+          path: "teacher",
+        },
+      });
+
+      if (student && student.lessons) {
+        lessons = formatDayLessons(student.lessons);
+      }
+    }
+
+    res.status(200).json(lessons);
+
   }catch(error){
     console.error(error);
     res.status(500).json({ error: "Ошибка сервера" });
