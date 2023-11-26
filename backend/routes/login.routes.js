@@ -22,22 +22,6 @@ router.post('/login', [
     .withMessage("Пароль не может быть пустым")
 ], loginController.login);
 
-router.get('/userInfo', [
-  check("email")
-    .exists()
-    .withMessage("Требуется Email")
-    .isEmail()
-    .withMessage("Неверный email")
-    .not()
-    .isEmpty()
-    .withMessage("Email не может быть пустым")
-    .normalizeEmail(),
-  check("password")
-    .exists()
-    .withMessage("Требуется пароль")
-    .not()
-    .isEmpty()
-    .withMessage("Пароль не может быть пустым")
-], authenticateToken, loginController.getUserInfo);
+router.get('/getInfo',authenticateToken, loginController.getUserInfo);
 
 module.exports = router;
