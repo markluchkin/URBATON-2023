@@ -53,13 +53,15 @@ class lessonController{
 async getTeacherLessons(req, res){
   try{
     const userRole = req.user.role;
+    console.log(userRole);
     let user;
-    if (userRole === "Teacher") {
-      user = await Teacher.findById(req.user._id).populate("timetable");
+    if (userRole == "Teacher") {
+      user = await Teacher.findById(req.user.userId);
     } 
     else {
       return res.status(403).json({ error: "Нет доступа" });
     }
+    console.log(user);
     const lessons = user.timetable.reduce((acc, lesson) => {
       const day = lesson.day;
       const time = lesson.time;
