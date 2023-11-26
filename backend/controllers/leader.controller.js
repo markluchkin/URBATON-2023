@@ -262,7 +262,7 @@ class leaderController {
   async getAllTeachers(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
-    if (userRole !== "Leader") {
+    if (userRole !== "Leader" && userRole !== "Admin") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
     try {
