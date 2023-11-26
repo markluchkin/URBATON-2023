@@ -6,7 +6,10 @@ async function fetchTeacherName(teacherId) {
   const teacher = await Teacher.findById(teacherId);
   return teacher ? teacher.name + " " + teacher.surname : 'Unknown Teacher';
 }
-
+async function fetchGroupName(groupId) {
+  const group = await Group.findById(groupId);
+  return group ? group.name : 'Unknown Group';
+}
 class markController {
 
   async createMark(req, res) {
@@ -131,6 +134,48 @@ class markController {
     for (const subject in groupedMarks) {
       resultArray.push({
         subject: subject, // Используем название предмета
+        marks: groupedMarks[subject], // Массив оценок для данного предмета
+      });
+    }
+
+    res.json(resultArray);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Ошибка сервера' });
+    }
+  }
+
+//doesnt work
+  async getTeacherMark(req, res) {
+    const teacherId = req.user.userId;
+
+  try {
+    const teacher = await Teacher.findById(teacherId);
+
+    if (!teacher) {
+      return res.status(404).json({ message: 'Учитель не найден' });
+    }
+
+    const marks = await Mark.find({ teacher: teacherId }).populate('student').exec();
+    const groupedMarks = {};
+    
+    for (const mark of marks) {
+      if (!groupedMarks[mark.student]) {
+        groupedMarks[mark.student] = [];
+      }
+
+      const groupName = await fetchGroupName(mark.student.group);
+      groupedMarks[mark.student].push({
+        id: mark._id,
+        value: mark.value,
+      });
+    }
+
+    // Формируем массив для ответа
+    const resultArray = [];
+    for (const subject in groupedMarks) {
+      resultArray.push({
+        group: groupName, // Используем название предмета
         marks: groupedMarks[subject], // Массив оценок для данного предмета
       });
     }

@@ -168,7 +168,7 @@ async createLesson(req, res){
 }
 async getTeacherLessons(req, res){
   try {
-    const teacherId = req.body.teacherId;
+    const teacherId = req.user.userId;
     const lessons = await getTeachLess(teacherId);
     res.json({ lessons });
   } catch (error) {
