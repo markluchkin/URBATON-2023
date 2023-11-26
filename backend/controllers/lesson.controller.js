@@ -24,7 +24,7 @@ const getStudLess = async (studentId) => {
       acc[lesson.day].push({
         time: lesson.time,
         subject: lesson.subject,
-        teacher: lesson.teacher.name,
+        teacher: lesson.teacher.name + ' ' + lesson.teacher.surname,
         cabinet: lesson.cabinet,
       });
       return acc;
@@ -100,7 +100,7 @@ const getAllLess = async () => {
       acc[dayKey].lessons.push({
         time: lesson.time,
         subject: lesson.subject,
-        teacher: lesson.teacher.name,
+        teacher: lesson.teacher.name + ' ' + lesson.teacher.surname,
         group: lesson.group.name,
         cabinet: lesson.cabinet,
       });
