@@ -90,7 +90,7 @@ class leaderController {
   async createUser(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
-    if (userRole !== "Leader") {
+    if (userRole !== "Leader" ) {
       return res.status(403).json({ error: "В доступе отказано" });
     }
     const { name, surname, email, role, phone, subject, group, groups, students } = req.body;
@@ -247,7 +247,7 @@ class leaderController {
   async getAllAdmins(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
-    if (userRole !== "Leader") {
+    if (userRole !== "Leader" && userRole !== "Admin") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
     try {
@@ -277,7 +277,7 @@ class leaderController {
   async getAllParents(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
-    if (userRole !== "Leader") {
+    if (userRole !== "Leader" && userRole !== "Admin") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
     try {
@@ -292,7 +292,7 @@ class leaderController {
   async getAllStudents(req, res) {
     const userOrganization = req.user.organization;
     const userRole = req.user.role;
-    if (userRole !== "Leader") {
+    if (userRole !== "Leader" && userRole !== "Admin") {
       return res.status(403).json({ error: "В доступе отказано." });
     }
     try {
