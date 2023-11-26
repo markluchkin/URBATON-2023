@@ -22,7 +22,7 @@ class markController {
       //console.log(teacher.subject);
       const organization = req.user.organization;
       //console.log(req.user);
-      console.log(teacherId);
+      //console.log(teacher);
       const newMark = new Mark({
         subject: teacher.subject,
         value: value,

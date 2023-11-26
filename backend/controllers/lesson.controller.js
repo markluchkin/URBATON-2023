@@ -3,6 +3,42 @@ const Teacher = require("../models/Teacher");
 const Group = require("../models/Group");
 const Student = require("../models/Student");
 
+const getStudLess = async (studentId) => {
+  try {
+    const student = await Student.findById(studentId).populate("timetable");
+
+    if (!student) {
+      throw new Error("Студент не найден");
+    }
+
+    const result = [];
+
+    const groupedByDay = student.timetable.reduce((acc, lesson) => {
+      acc[lesson.day] = acc[lesson.day] || [];
+      acc[lesson.day].push({
+        time: lesson.time,
+        subject: lesson.subject,
+        teacher: lesson.teacher,
+        cabinet: lesson.cabinet,
+      });
+      return acc;
+    }, {});
+
+    for (const day in groupedByDay) {
+      result.push({
+        day: parseInt(day),
+        lessons: groupedByDay[day],
+      });
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Ошибка при получении уроков студента:", error.message);
+    throw error;
+  }
+};
+
+
 class lessonController{
   async createLesson(req, res){
     try{
@@ -51,86 +87,16 @@ class lessonController{
     }
 }
 async getTeacherLessons(req, res){
-  try{
-    const userRole = req.user.role;
-    /* console.log(userRole);
-    let user;
-    if (userRole == "Teacher") {
-      user = await Teacher.findById(req.user.userId);
-    } 
-    else {
-      return res.status(403).json({ error: "Нет доступа" });
-    }
-    console.log(user);
-    const lessons = user.timetable.reduce((acc, lesson) => {
-      const day = lesson.day;
-      const time = lesson.time;
-      const subject = lesson.subject;
 
-      if (!acc[day]) {
-        acc[day] = [];
-      }
+}
 
-      acc[day].push({ time, subject });
-      return acc;
-    }, {});
-
-    const lessonsArray = Object.entries(lessons).map(([day, timetable]) => ({
-      day,
-      timetable,
-    }));
-
-    res.json(lessonsArray); */
-
-    const formatDayLessons = (lessons) => {
-      const formattedLessons = {};
-
-      lessons.forEach((lesson) => {
-        const lessonTime = lesson.time;
-        const lessonSubject = lesson.subject;
-
-        if (!formattedLessons[lesson.day]) {
-          formattedLessons[lesson.day] = [];
-        }
-
-        formattedLessons[lesson.day].push(`${lessonTime}: ${lessonSubject}`);
-      });
-
-      return formattedLessons;
-    };
-    let lessons = [];
-
-    if (userRole === "Teacher") {
-      const teacherId = req.user._id;
-      const teacher = await Teacher.findById(teacherId).populate({
-        path: "timetable",
-        populate: {
-          path: "group",
-        },
-      });
-
-      if (teacher && teacher.timetable) {
-        lessons = formatDayLessons(teacher.timetable);
-      }
-    } else if (userRole === "Student") {
-      const studentId = req.user._id;
-      const student = await Student.findById(studentId).populate({
-        path: "lessons",
-        populate: {
-          path: "teacher",
-        },
-      });
-
-      if (student && student.lessons) {
-        lessons = formatDayLessons(student.lessons);
-      }
-    }
-
-    res.status(200).json(lessons);
-
-  }catch(error){
-    console.error(error);
-    res.status(500).json({ error: "Ошибка сервера" });
+async getStudentLessons(req,res){
+  try {
+    const studentId = req.body.studentId;
+    const lessons = await getStudLess(studentId);
+    res.json({ lessons });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 }

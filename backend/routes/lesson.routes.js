@@ -5,5 +5,6 @@ const router = new Router();
 
 router.post('/createLesson', lessonController.createLesson);
 router.get('/getTeacherLesson', lessonController.getTeacherLessons);
+router.post('/getStudentLesson', lessonController.getStudentLessons);
 
 module.exports = router;
