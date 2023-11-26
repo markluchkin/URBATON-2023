@@ -31,6 +31,6 @@ router.post('/create', [
 ], markController.createMark);
 
 router.get('/getGroups', markController.getGroupsByTeacher);
-router.get('/getStudentMark', markController.getStudentMark);
+router.post('/getStudentMark', markController.getStudentMark);
 
 module.exports = router;
