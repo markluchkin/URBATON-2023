@@ -17,13 +17,13 @@ const lessonSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Group",
     },
-    date: {
-        type: Date,
-        //required: true,
+    day: {
+        type: String,
+        required: true,
     },
     time: {
         type: String,
-        //required: true,
+        required: true,
     },
     organization: {
         type: String,
