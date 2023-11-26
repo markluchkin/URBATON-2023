@@ -98,7 +98,7 @@ class loginController {
             return { name: student.name + ' ' + student.surname, id: student._id };
           }),
         };
-        res.status(200).json({responseData});
+        res.status(200).json(responseData);
         //console.log(token);
       }
       else if (teacher) {
