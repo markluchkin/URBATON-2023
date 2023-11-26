@@ -4,7 +4,7 @@ const { check } = require("express-validator");
 const router = new Router();
 
 router.post('/createLesson', lessonController.createLesson);
-router.post('/getTeacherLesson', lessonController.getTeacherLessons);
+router.get('/getTeacherLesson', lessonController.getTeacherLessons);
 router.post('/getStudentLesson', lessonController.getStudentLessons);
 router.get('/getAllLesson', lessonController.getAllLessons);
 
