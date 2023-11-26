@@ -73,7 +73,7 @@ class loginController {
           "pryanik",
           { expiresIn: "7d" }
         );
-        res.status(200).json({ token, userId: leader._id, role: role });
+        res.status(200).json({ token, userId: leader._id, role: role, organization: organization   });
         //console.log(token);
       }
       else if (parent) {
@@ -91,6 +91,7 @@ class loginController {
           { expiresIn: "7d" }
         );
         const responseData = {
+          organization: organization, 
           token,
           userId: parent._id,
           role: role,
@@ -123,7 +124,7 @@ class loginController {
           "pryanik",
           { expiresIn: "7d" }
         );
-        res.status(200).json({ token, userId: teacher._id, role: role});
+        res.status(200).json({ token, userId: teacher._id, role: role, organization: organization  });
         //console.log(token);
       }
       else if (student) {
@@ -140,7 +141,7 @@ class loginController {
           "pryanik",
           { expiresIn: "7d" }
         );
-        res.status(200).json({ token, userId: student._id, role: role });
+        res.status(200).json({ token, userId: student._id, role: role, organization: organization });
         //console.log(token);
       }
       else if (admin) {
@@ -157,7 +158,7 @@ class loginController {
           "pryanik",
           { expiresIn: "7d" }
         );
-        res.status(200).json({ token, userId: admin._id, role: role });
+        res.status(200).json({ token, userId: admin._id, role: role, organization: organization });
         //console.log(token);
       }
       else {
