@@ -191,7 +191,7 @@ class loginController {
           const role = user.role;
           const id = user._id;
 
-          res.status(200).json({"name":name, "emal": email, "phone": phone, "role": role, "id": id});
+          res.status(200).json({"name":name, "email": email, "phone": phone, "role": role, "id": id});
         } else {
           res.status(404).json("Пользователь не найден")
           console.log("Пользователь не найден");

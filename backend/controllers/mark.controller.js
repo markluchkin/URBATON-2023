@@ -69,7 +69,9 @@ class markController {
       }
       //console.log(teacher);
       //console.log(teacher.groups);
+      
       const formattedGroups = await Promise.all(teacher.groups.map(async (groupName) => {
+        //console.log(groupName)
         const group = await Group.findOne({ name: groupName }).populate('students', 'name surname _id');
 
         if (!group) {
