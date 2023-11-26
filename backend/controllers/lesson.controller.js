@@ -50,7 +50,40 @@ class lessonController{
       res.status(500).json({ error: "Ошибка сервера" });
     }
 }
-  
+async getTeacherLessons(req, res){
+  try{
+    const userRole = req.user.role;
+    let user;
+    if (userRole === "Teacher") {
+      user = await Teacher.findById(req.user._id).populate("timetable");
+    } 
+    else {
+      return res.status(403).json({ error: "Нет доступа" });
+    }
+    const lessons = user.timetable.reduce((acc, lesson) => {
+      const day = lesson.day;
+      const time = lesson.time;
+      const subject = lesson.subject;
+
+      if (!acc[day]) {
+        acc[day] = [];
+      }
+
+      acc[day].push({ time, subject });
+      return acc;
+    }, {});
+
+    const lessonsArray = Object.entries(lessons).map(([day, timetable]) => ({
+      day,
+      timetable,
+    }));
+
+    res.json(lessonsArray);
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+}
 }
 
 module.exports = new lessonController();
