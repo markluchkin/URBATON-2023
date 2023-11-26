@@ -93,7 +93,7 @@ class leaderController {
     if (userRole !== "Leader") {
       return res.status(403).json({ error: "В доступе отказано" });
     }
-    const { name, surname, email, role, phone, subject, group, groups } = req.body;
+    const { name, surname, email, role, phone, subject, group, groups, students } = req.body;
     try {
       const existingAdmin = await Admin.findOne({
         $or: [
@@ -186,6 +186,7 @@ class leaderController {
             email: email,
             phone: phone,
             password: hashedPassword,
+            students: students,
             organization: userOrganization
           })
           await newParent.save()
