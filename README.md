@@ -3,7 +3,7 @@
 Кейс "Единая образовательная система школ дополнительного творческого образования".
 
 команда:
-front @Crying-Soul \n
-back me + @w3hhh-m \n
-tg-bot @rnymphaea \n
-ванек @Rodnov-Ivan
+front: @Crying-Soul 
+back: me + @w3hhh-m 
+tg-bot: @rnymphaea 
+ванек: @Rodnov-Ivan
